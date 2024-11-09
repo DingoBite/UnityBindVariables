@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Bind
@@ -13,10 +14,10 @@ namespace Bind
 
     public interface IReadonlyAsyncBind<out T>
     {
-        public void AddListener(Func<T, Task> listener);
-        public void RemoveListener(Func<T, Task> listener);
+        public void AddListener(Func<T, CancellationTokenSource, Task> listener);
+        public void RemoveListener(Func<T, CancellationTokenSource, Task> listener);
         
-        public event Func<T, Task> OnValueChangeAsync;
+        public event Func<T, CancellationTokenSource, Task> OnValueChangeAsync;
         public T V { get; }
         public T GetValue();
     }
@@ -40,7 +41,7 @@ namespace Bind
     public interface IAsyncValueContainer<T>
     {
         public T V { get; }
-        public Task SetValueAsync(T value);
+        public Task SetValueAsync(T value, CancellationTokenSource cancellationTokenSource = null);
     }
     
 }

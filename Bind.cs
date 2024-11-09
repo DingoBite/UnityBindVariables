@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Bind
@@ -39,10 +40,10 @@ namespace Bind
 
     public class AsyncBind<T> : IAsyncBind<T>
     {
-        public event Func<T, Task> OnValueChangeAsync;
+        public event Func<T, CancellationTokenSource, Task> OnValueChangeAsync;
         
-        public void AddListener(Func<T, Task> listener) => OnValueChangeAsync += listener;
-        public void RemoveListener(Func<T, Task> listener) => OnValueChangeAsync -= listener;
+        public void AddListener(Func<T, CancellationTokenSource, Task> listener) => OnValueChangeAsync += listener;
+        public void RemoveListener(Func<T, CancellationTokenSource, Task> listener) => OnValueChangeAsync -= listener;
         
         public T V { get; private set; }
 
@@ -55,13 +56,13 @@ namespace Bind
             V = value;
         }
 
-        public async Task SetValueAsync(T value)
+        public async Task SetValueAsync(T value, CancellationTokenSource cancellationTokenSource = null)
         {
             V = value;
             if (OnValueChangeAsync == null)
                 return;
             
-            await OnValueChangeAsync.Invoke(value);
+            await OnValueChangeAsync.Invoke(value, cancellationTokenSource);
         }
 
         public T GetValue()

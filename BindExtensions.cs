@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine.Events;
 
@@ -11,13 +12,13 @@ namespace Bind
             bind.OnValueChange -= action;
         }
         
-        public static void SafeSubscribe<TValue>(this IReadonlyAsyncBind<TValue> bind, Func<TValue, Task> action)
+        public static void SafeSubscribe<TValue>(this IReadonlyAsyncBind<TValue> bind, Func<TValue, CancellationTokenSource, Task> action)
         {
             bind.OnValueChangeAsync -= action;
             bind.OnValueChangeAsync += action;
         }
         
-        public static void UnSubscribe<TValue>(this IReadonlyAsyncBind<TValue> bind, Func<TValue, Task> action)
+        public static void UnSubscribe<TValue>(this IReadonlyAsyncBind<TValue> bind, Func<TValue, CancellationTokenSource, Task> action)
         {
             bind.OnValueChangeAsync -= action;
         }
@@ -57,7 +58,7 @@ namespace Bind
             model.OnValueChange += e.Invoke;
         }
         
-        public static void SafeBindAsyncInvoke<TValue>(this IReadonlyAsyncBind<TValue> model, Func<TValue, Task> e)
+        public static void SafeBindAsyncInvoke<TValue>(this IReadonlyAsyncBind<TValue> model, Func<TValue, CancellationTokenSource, Task> e)
         {
             model.OnValueChangeAsync -= e.Invoke;
             model.OnValueChangeAsync += e.Invoke;

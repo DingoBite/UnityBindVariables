@@ -50,6 +50,11 @@ namespace Bind
             bind.AddListener(action);
         }
         
+        public static void UnSubscribe<TValue>(this UnityEvent<TValue> view, UnityAction<TValue> action)
+        {
+            view.RemoveListener(action);
+        }
+        
         public static void UnSubscribe(this UnityEvent bind, UnityAction action)
         {
             bind.RemoveListener(action);

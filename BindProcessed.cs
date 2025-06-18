@@ -52,11 +52,11 @@ namespace Bind
             if (_value == null && value != null || _value != null && value == null)
                 return false;
 
-            if (_equalityComparer != null && _equalityComparer(_value, value))
-                return false;
+            if (_equalityComparer != null)
+                return _equalityComparer(_value, value);
 
-            if (_value != null && value != null && !_value.Equals(value))
-                return false;
+            if (_value != null && value != null)
+                return _value.Equals(value);
 
             return true;
         }

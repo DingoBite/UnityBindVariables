@@ -56,6 +56,8 @@ namespace Bind
         
         public void SetValue(T value) => V = value;
         public T GetValue() => V;
+
+        public void RemoveAllListeners() => OnValueChange = null;
     }
 
     public class AsyncBind<T> : IAsyncBind<T>
